@@ -1,0 +1,26 @@
+---
+- name: Create New User
+  hosts: all
+  become: true
+  gather_facts: false
+  vars:
+# Define your username and password here that you want to create on target hosts.
+  tasks:
+    - name: Create User
+      ansible.builtin.user:
+        name: "{{ item.name }}"
+        state: present
+        shell: /bin/bash
+        password: "{{ item.password | password_hash('sha512') }}"
+        update_password: on_create
+        groups: "{{ super_group }}"
+        append: yes
+      loop:
+        - { name: 'razvanbalsan', password: 'QAZ123CVS' }
+    - name: Deploy SSH Public Key
+      authorized_key:
+        user: "{{ item.name }}"
+        state: present
+        key: "{{ lookup('file', '/proj-useradd/users/{{ item.name }}/id_rsa.pub') }}"
+      loop:
+        - { name: 'razvanbalsan' }

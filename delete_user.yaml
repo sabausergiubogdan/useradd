@@ -1,0 +1,22 @@
+---
+- name: Delete New User
+  hosts: all
+  become: true
+  gather_facts: false
+  vars:
+# Define your username and password here that you want to create on target hosts.
+  tasks:
+    - name: Delete User
+      ansible.builtin.user:
+        name: "{{ item.name }}"
+        state: absent
+        remove: yes
+        shell: /bin/bash
+        password: "{{ item.password | password_hash('sha512') }}"
+        update_password: on_create
+        groups: "{{ super_group }}"
+        append: yes
+      loop:
+              # - { name: 'testuser1', password: 'cornel' }
+        - { name: 'testuser2', password: 'cornel' }
+        - { name: 'testuser3', password: 'cornel' }
