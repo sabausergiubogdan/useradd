@@ -16,7 +16,7 @@
         groups: "{{ super_group }}"
         append: yes
       loop:
-        - { name: 'razvanbalsan', password: 'QAZ123CVS' }
+        - { name: 'razusman', password: 'QAZ123CVS' }
     - name: Deploy SSH Public Key
       authorized_key:
         user: "{{ item.name }}"
